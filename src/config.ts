@@ -6,7 +6,7 @@ export const CONFIG = {
   PORT: Number(process.env.PORT) || 3001,
   FRONTEND_URL: process.env.FRONTEND_URL || 'http://localhost:5173',
   GEMINI_API_KEY: process.env.GEMINI_API_KEY || '',
-  GEMINI_MODEL: process.env.GEMINI_MODEL || 'gemini-2.5-flash-lite-preview-06-17',
+  GEMINI_MODEL: process.env.GEMINI_MODEL || 'gemini-2.0-flash',
 } as const;
 
 export function validateConfig(): void {
