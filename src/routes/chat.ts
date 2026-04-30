@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { generateChatResponse, generateResponseForChannel } from '../services/gemini.js';
+import { generateChatResponse, generateResponseForChannel } from '../services/groq.js';
 import type { ChatRequest, WebhookRequest } from '../types/index.js';
 
 const router = Router();

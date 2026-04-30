@@ -34,7 +34,8 @@ app.listen(CONFIG.PORT, () => {
   console.log('║   🤖 Symmetrical Code Backend - Chatbot Server          ║');
   console.log('╠══════════════════════════════════════════════════════════╣');
   console.log(`║   🌐 URL: http://localhost:${CONFIG.PORT}                      ║`);
-  console.log(`║   🧠 Modelo: ${CONFIG.GEMINI_MODEL}      ║`);
+  console.log(`║   🧠 Modelo: ${CONFIG.GROQ_MODEL}        ║`);
+  console.log('║   🔌 Proveedor: Groq (1,000 req/día gratis)             ║');
   console.log('║                                                          ║');
   console.log('║   Endpoints:                                             ║');
   console.log('║   • POST /api/chat           → Chat desde la web        ║');
