@@ -1,17 +1,17 @@
 import { Router } from 'express';
-import { generateChatResponse } from '../services/groq.js';
+import { generateResponseForChannel } from '../services/groq.js';
 import type { ChatRequest } from '../types/index.js';
 
 const router = Router();
 
 /**
  * POST /api/chat
- * Body: { message: string, history?: ChatMessage[], language?: string }
+ * Body: { message: string, history?: ChatMessage[] }
  * Response: { success: boolean, reply: string }
  */
 router.post('/chat', async (req, res) => {
   try {
-    const { message, history, language }: ChatRequest & { language?: string } = req.body;
+    const { message, history }: ChatRequest = req.body;
 
     if (!message || typeof message !== 'string') {
       res.status(400).json({
@@ -22,8 +22,8 @@ router.post('/chat', async (req, res) => {
       return;
     }
 
-    // language viene del frontend ('es' | 'en'), por defecto 'es'
-    const reply = await generateChatResponse(message, history, language ?? 'es');
+    // Detecta automáticamente el idioma del mensaje
+    const reply = await generateResponseForChannel(message, 'web', history);
 
     res.json({ success: true, reply });
   } catch (error) {
