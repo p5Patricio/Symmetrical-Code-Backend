@@ -23,14 +23,22 @@ interface GroqResponse {
  *
  * @param userMessage - El mensaje del usuario
  * @param history - Historial previo de la conversación (opcional)
+ * @param language - Idioma en el que debe responder ('es' | 'en'), por defecto 'es'
  * @returns La respuesta del modelo
  */
 export async function generateChatResponse(
   userMessage: string,
-  history: ChatMessage[] = []
+  history: ChatMessage[] = [],
+  language: string = 'es'
 ): Promise<string> {
+  // Instrucción de idioma que se agrega al final del system prompt
+  const languageInstruction =
+    language === 'en'
+      ? '\n\n LANGUAGE INSTRUCTION: The user has their interface set to English. You MUST respond in English for the entire conversation, regardless of the language the user writes in.'
+      : '\n\n INSTRUCCIÓN DE IDIOMA: El usuario tiene la interfaz en español. Respondé siempre en español.';
+
   const messages: GroqMessage[] = [
-    { role: 'system', content: SYSTEM_PROMPT },
+    { role: 'system', content: SYSTEM_PROMPT + languageInstruction },
   ];
 
   // Convertir historial al formato de Groq (OpenAI)
@@ -69,13 +77,13 @@ export async function generateChatResponse(
 
 /**
  * Wrapper para canales externos (WhatsApp, etc.)
- * Permite agregar metadata del canal sin afectar la conversación.
  */
 export async function generateResponseForChannel(
   userMessage: string,
   channel: 'web' | 'whatsapp',
-  history: ChatMessage[] = []
+  history: ChatMessage[] = [],
+  language: string = 'es'
 ): Promise<string> {
   console.log(`[${channel.toUpperCase()}] Procesando mensaje...`);
-  return generateChatResponse(userMessage, history);
+  return generateChatResponse(userMessage, history, language);
 }

@@ -6,14 +6,12 @@ const router = Router();
 
 /**
  * POST /api/chat
- * Endpoint principal para el chatbot desde la página web.
- *
- * Body: { message: string, history?: ChatMessage[] }
+ * Body: { message: string, history?: ChatMessage[], language?: string }
  * Response: { success: boolean, reply: string }
  */
 router.post('/chat', async (req, res) => {
   try {
-    const { message, history }: ChatRequest = req.body;
+    const { message, history, language }: ChatRequest & { language?: string } = req.body;
 
     if (!message || typeof message !== 'string') {
       res.status(400).json({
@@ -24,12 +22,10 @@ router.post('/chat', async (req, res) => {
       return;
     }
 
-    const reply = await generateChatResponse(message, history);
+    // language viene del frontend ('es' | 'en'), por defecto 'es'
+    const reply = await generateChatResponse(message, history, language ?? 'es');
 
-    res.json({
-      success: true,
-      reply,
-    });
+    res.json({ success: true, reply });
   } catch (error) {
     console.error('Error en /api/chat:', error);
     res.status(500).json({
@@ -42,45 +38,27 @@ router.post('/chat', async (req, res) => {
 
 /**
  * POST /api/webhook/whatsapp
- * Endpoint para recibir mensajes de WhatsApp.
- * DISEÑADO PARA SER USADO POR EL COMPAÑERO QUE INTEGRA WHATSAPP.
- *
  * Body: { channel: 'whatsapp', userId: string, message: string, timestamp: string }
- * Response: { success: boolean, reply: string }
  */
 router.post('/webhook/whatsapp', async (req, res) => {
   try {
     const { channel, userId, message, timestamp }: WebhookRequest = req.body;
 
     if (channel !== 'whatsapp') {
-      res.status(400).json({
-        success: false,
-        reply: '',
-        error: 'Canal no soportado. Usá "whatsapp".',
-      });
+      res.status(400).json({ success: false, reply: '', error: 'Canal no soportado. Usá "whatsapp".' });
       return;
     }
 
     if (!message || typeof message !== 'string') {
-      res.status(400).json({
-        success: false,
-        reply: '',
-        error: 'El campo "message" es requerido.',
-      });
+      res.status(400).json({ success: false, reply: '', error: 'El campo "message" es requerido.' });
       return;
     }
 
     console.log(`[WHATSAPP] Mensaje de ${userId} a las ${timestamp}: ${message}`);
 
-    // Generar respuesta usando el MISMO cerebro de IA que la web
     const reply = await generateResponseForChannel(message, 'whatsapp');
 
-    // La respuesta se devuelve en JSON. El integrador de WhatsApp
-    // debe tomar este "reply" y enviarlo por la WhatsApp API de Meta.
-    res.json({
-      success: true,
-      reply,
-    });
+    res.json({ success: true, reply });
   } catch (error) {
     console.error('Error en /api/webhook/whatsapp:', error);
     res.status(500).json({
@@ -93,7 +71,6 @@ router.post('/webhook/whatsapp', async (req, res) => {
 
 /**
  * GET /health
- * Health check para verificar que el servidor está corriendo.
  */
 router.get('/health', (_req, res) => {
   res.json({
