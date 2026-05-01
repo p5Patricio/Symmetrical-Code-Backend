@@ -40,56 +40,7 @@ router.post('/chat', async (req, res) => {
   }
 });
 
-/**
- * POST /api/webhook/whatsapp
- * Endpoint para recibir mensajes de WhatsApp.
- * DISEÑADO PARA SER USADO POR EL COMPAÑERO QUE INTEGRA WHATSAPP.
- *
- * Body: { channel: 'whatsapp', userId: string, message: string, timestamp: string }
- * Response: { success: boolean, reply: string }
- */
-router.post('/webhook/whatsapp', async (req, res) => {
-  try {
-    const { channel, userId, message, timestamp }: WebhookRequest = req.body;
 
-    if (channel !== 'whatsapp') {
-      res.status(400).json({
-        success: false,
-        reply: '',
-        error: 'Canal no soportado. Usá "whatsapp".',
-      });
-      return;
-    }
-
-    if (!message || typeof message !== 'string') {
-      res.status(400).json({
-        success: false,
-        reply: '',
-        error: 'El campo "message" es requerido.',
-      });
-      return;
-    }
-
-    console.log(`[WHATSAPP] Mensaje de ${userId} a las ${timestamp}: ${message}`);
-
-    // Generar respuesta usando el MISMO cerebro de IA que la web
-    const reply = await generateResponseForChannel(message, 'whatsapp');
-
-    // La respuesta se devuelve en JSON. El integrador de WhatsApp
-    // debe tomar este "reply" y enviarlo por la WhatsApp API de Meta.
-    res.json({
-      success: true,
-      reply,
-    });
-  } catch (error) {
-    console.error('Error en /api/webhook/whatsapp:', error);
-    res.status(500).json({
-      success: false,
-      reply: '',
-      error: 'Ocurrió un error al procesar el mensaje de WhatsApp.',
-    });
-  }
-});
 
 /**
  * GET /health
@@ -103,4 +54,5 @@ router.get('/health', (_req, res) => {
   });
 });
 
-export default router;
+
+export default router
