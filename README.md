@@ -25,7 +25,7 @@ npm install
 
 # Configurar variables de entorno
 cp .env.example .env
-# Editá .env y agregá tu GEMINI_API_KEY
+# Editá .env y agregá tu GROQ_API_KEY
 
 # Correr en desarrollo
 npm run dev
@@ -41,7 +41,7 @@ backend/
 │   ├── routes/
 │   │   └── chat.ts           # Endpoints /chat y /webhook/whatsapp
 │   ├── services/
-│   │   └── gemini.ts         # Integración Google Gemini
+│   │   └── groq.ts           # Integración Groq API (Llama 3.3 70B)
 │   ├── data/
 │   │   └── startupContext.ts # Conocimiento de Symmetrical Code
 │   └── types/

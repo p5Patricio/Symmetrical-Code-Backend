@@ -27,7 +27,8 @@ El backend ya está construido y tiene un endpoint listo para recibir mensajes d
 │   (WhatsApp)    │◄────►│                             │◄────►│   API           │
 │                 │      │  POST /api/webhook/whatsapp │      │   (WhatsApp)    │
 └─────────────────┘      │       ↓                     │      └─────────────────┘
-                         │  Procesa con Gemini IA      │
+                         │  Procesa con Groq IA        │
+                         │  (Llama 3.3 70B)            │
                          │       ↓                     │
                          │  Devuelve respuesta JSON    │
                          └─────────────────────────────┘

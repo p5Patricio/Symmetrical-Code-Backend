@@ -1,16 +1,9 @@
 import { Router } from 'express';
-import { generateChatResponse, generateResponseForChannel } from '../services/groq.js';
-import type { ChatRequest, WebhookRequest } from '../types/index.js';
+import { generateResponseForChannel } from '../services/groq.js';
+import type { ChatRequest } from '../types/index.js';
 
 const router = Router();
 
-/**
- * POST /api/chat
- * Endpoint principal para el chatbot desde la página web.
- *
- * Body: { message: string, history?: ChatMessage[] }
- * Response: { success: boolean, reply: string }
- */
 router.post('/chat', async (req, res) => {
   try {
     const { message, history }: ChatRequest = req.body;
@@ -24,12 +17,10 @@ router.post('/chat', async (req, res) => {
       return;
     }
 
-    const reply = await generateChatResponse(message, history);
+    // Siempre detecta el idioma del mensaje actual — ignora cualquier default
+    const reply = await generateResponseForChannel(message, 'web', history);
 
-    res.json({
-      success: true,
-      reply,
-    });
+    res.json({ success: true, reply });
   } catch (error) {
     console.error('Error en /api/chat:', error);
     res.status(500).json({
@@ -40,12 +31,6 @@ router.post('/chat', async (req, res) => {
   }
 });
 
-
-
-/**
- * GET /health
- * Health check para verificar que el servidor está corriendo.
- */
 router.get('/health', (_req, res) => {
   res.json({
     status: 'ok',
@@ -54,5 +39,4 @@ router.get('/health', (_req, res) => {
   });
 });
 
-
-export default router
+export default router;
