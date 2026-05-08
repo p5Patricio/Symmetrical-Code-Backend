@@ -107,3 +107,60 @@ export async function generateResponseForChannel(
 
   return generateChatResponse(userMessage, history, detectedLanguage);
 }
+
+/**
+ * Datos del lead capturados por la IA cuando el cliente
+ * proporciona toda la información para ser contactado.
+ */
+export interface CapturedLead {
+  nombre: string;
+  descripcion: string;
+}
+
+/**
+ * Resultado del parser de respuestas del bot.
+ * - Si la IA devolvió JSON con datos del lead → leadCaptured = true + datos
+ * - Si la IA devolvió texto normal → leadCaptured = false + el texto
+ */
+export interface ParsedBotResponse {
+  leadCaptured: boolean;
+  reply: string;
+  data?: CapturedLead;
+}
+
+/**
+ * Intenta detectar si la respuesta del bot es un JSON con datos del lead.
+ * Si lo es, extrae los datos. Si no, devuelve el texto tal cual.
+ */
+export function parseBotResponse(rawResponse: string): ParsedBotResponse {
+  // Limpiar bloques de código markdown si la IA los agregó por error
+  const cleaned = rawResponse
+    .trim()
+    .replace(/^```json\s*/i, '')
+    .replace(/^```\s*/i, '')
+    .replace(/```$/i, '')
+    .trim();
+
+  // Si no empieza con { no es JSON
+  if (!cleaned.startsWith('{')) {
+    return { leadCaptured: false, reply: rawResponse };
+  }
+
+  try {
+    const parsed = JSON.parse(cleaned);
+
+    if (parsed.leadCaptured && parsed.data && parsed.reply) {
+      return {
+        leadCaptured: true,
+        reply: parsed.reply,
+        data: parsed.data,
+      };
+    }
+
+    // Es JSON pero no tiene la estructura esperada → tratar como texto
+    return { leadCaptured: false, reply: rawResponse };
+  } catch {
+    // No es JSON válido → texto normal
+    return { leadCaptured: false, reply: rawResponse };
+  }
+}

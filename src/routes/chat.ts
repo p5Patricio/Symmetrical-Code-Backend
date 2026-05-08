@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { generateResponseForChannel } from '../services/groq.js';
 import type { ChatRequest } from '../types/index.js';
+import { sendLeadEmail } from '../services/email.js';
 
 const router = Router();
 
@@ -38,5 +39,17 @@ router.get('/health', (_req, res) => {
     timestamp: new Date().toISOString(),
   });
 });
+
+
+// // 🧪 ENDPOINT DE PRUEBA - ELIMINAR DESPUÉS
+// router.post('/test-email', async (req, res) => {
+//   const success = await sendLeadEmail({
+//     nombre: 'Cliente de Prueba',
+//     descripcion: 'Quiero saber más sobre sus servicios de e-commerce',
+//     whatsapp: '524181585313',
+//   });
+
+//   res.json({ success });
+// });
 
 export default router;
