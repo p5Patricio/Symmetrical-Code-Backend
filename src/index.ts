@@ -3,6 +3,7 @@ import cors from 'cors';
 import { CONFIG, validateConfig } from './config.js';
 import chatRoutes from './routes/chat.js';
 import whatsappRoutes from './routes/whatsapp.js';
+import contactRoutes from './routes/contact.js';
 
 const app = express();
 
@@ -21,6 +22,7 @@ app.use(express.json());
 // Rutas
 app.use('/api', chatRoutes);
 app.use('/api', whatsappRoutes);
+app.use('/api', contactRoutes);
 
 // Manejo de rutas no encontradas
 app.use((_req, res) => {
