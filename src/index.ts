@@ -3,6 +3,7 @@ import cors from 'cors';
 import { CONFIG, validateConfig } from './config.js';
 import chatRoutes from './routes/chat.js';
 import whatsappRoutes from './routes/whatsapp.js';
+import contactRoutes from './routes/contact.js';
 
 const app = express();
 
@@ -21,12 +22,13 @@ app.use(express.json());
 // Rutas
 app.use('/api', chatRoutes);
 app.use('/api', whatsappRoutes);
+app.use('/api', contactRoutes);
 
 // Manejo de rutas no encontradas
 app.use((_req, res) => {
   res.status(404).json({
     success: false,
-    error: 'Ruta no encontrada. Endpoints disponibles: POST /api/chat, POST /api/webhook/whatsapp, GET /api/health',
+    error: 'Ruta no encontrada. Endpoints disponibles: POST /api/chat, POST /api/contact, POST /api/webhook/whatsapp, GET /api/health',
   });
 });
 
@@ -40,8 +42,9 @@ app.listen(CONFIG.PORT, () => {
   console.log('║   🔌 Proveedor: Groq (1,000 req/día gratis)             ║');
   console.log('║                                                          ║');
   console.log('║   Endpoints:                                             ║');
-  console.log('║   • POST /api/chat           → Chat desde la web        ║');
+  console.log('║   • POST /api/chat             → Chat desde la web      ║');
+  console.log('║   • POST /api/contact          → Formulario contacto    ║');
   console.log('║   • POST /api/webhook/whatsapp → Webhook de WhatsApp    ║');
-  console.log('║   • GET  /api/health         → Health check             ║');
+  console.log('║   • GET  /api/health           → Health check           ║');
   console.log('╚══════════════════════════════════════════════════════════╝');
 });

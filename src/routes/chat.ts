@@ -22,7 +22,7 @@ router.post('/chat', async (req, res) => {
       return;
     }
 
-    // Detecta automáticamente el idioma del mensaje
+    // Siempre detecta el idioma del mensaje actual — ignora cualquier default
     const reply = await generateResponseForChannel(message, 'web', history);
 
     res.json({ success: true, reply });
