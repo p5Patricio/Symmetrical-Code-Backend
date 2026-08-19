@@ -25,8 +25,8 @@ export interface GeminiResponsePayload {
 
 export class GeminiClient {
   private apiKey: string;
-  private primaryModel = 'gemini-2.5-flash';
-  private fallbackModel = 'gemini-1.5-flash';
+  private primaryModel = 'gemini-3.1-flash-lite';
+  private fallbackModel = 'gemini-2.5-flash-lite';
 
   constructor(apiKey: string) {
     this.apiKey = apiKey;
