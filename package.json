@@ -1,0 +1,32 @@
+{
+  "name": "symmetrical-code-bot",
+  "version": "1.0.0",
+  "description": "Official WhatsApp AI Assistant backend for Symmetrical Code built on Cloudflare Workers",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "d1:migrate:local": "wrangler d1 migrations apply DB --local",
+    "d1:migrate:remote": "wrangler d1 migrations apply DB --remote"
+  },
+  "keywords": [
+    "cloudflare-workers",
+    "whatsapp",
+    "gemini",
+    "d1",
+    "telegram",
+    "chatbot"
+  ],
+  "author": "Symmetrical Code Team",
+  "license": "UNLICENSED",
+  "private": true,
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20241230.0",
+    "typescript": "^5.7.3",
+    "vitest": "^2.1.8",
+    "wrangler": "^3.101.0"
+  }
+}
