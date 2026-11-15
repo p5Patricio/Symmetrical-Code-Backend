@@ -9,7 +9,7 @@ enabled = true
 [[d1_databases]]
 binding = "DB"
 database_name = "symmetrical-code-db"
-database_id = "local-d1-placeholder"
+database_id = "00c4ba4b-dffa-4bf3-a6a4-eb347901203f"
 migrations_dir = "migrations"
 
 [vars]
